@@ -1,337 +1,297 @@
-# Article Scout 📚
+# Article Scout 🚀
 
-[![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/downloads/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io/)
+[![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)](https://www.python.org/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.46+-red.svg)](https://streamlit.io/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Package Manager](https://img.shields.io/badge/Package%20Manager-uv-orange.svg)](https://github.com/astral-sh/uv)
+[![AI Provider](https://img.shields.io/badge/AI%20Provider-Groq-purple.svg)](https://groq.com/)
+[![Code Style](https://img.shields.io/badge/Code%20Style-Black-black.svg)](https://github.com/psf/black)
 
-**Article Scout** is an intelligent research paper evaluation system that helps students and researchers assess the relevance and quality of academic papers for their TCC (Final Project) or research work.
+Research Paper Evaluator for TCC - A tool to evaluate research papers for relevance to Final Project themes.
 
-## 🌟 Features / Funcionalidades
+## 📊 Application Flow
 
-### 🔍 **PDF Text Extraction**
-- Multi-method PDF text extraction (PyPDF2, pdfminer.six, PyMuPDF)
-- Automatic text truncation for API limits
-- Support for various PDF formats
-
-### 🤖 **AI-Powered Evaluation**
-- Comprehensive paper evaluation using Groq LLM
-- Multiple evaluation criteria:
-  - Relevance to research theme
-  - Originality and novelty
-  - Methodology quality
-  - Results and discussion quality
-  - Potential impact
-  - Writing clarity
-  - References timeliness
-
-### 📊 **Interactive Web Interface**
-- Streamlit-based web application
-- Real-time evaluation results
-- User-friendly interface
-- Detailed explanations for each criterion
-
-### 🧪 **Comprehensive Testing**
-- Unit tests for PDF extraction
-- Integration tests for complete workflow
-- Performance testing
-- Error handling validation
-
----
-
-## 🚀 Quick Start / Início Rápido
-
-### Prerequisites / Pré-requisitos
-
-```bash
-# Python 3.12+
-# Groq API Key
-# Required packages (see requirements.txt)
+```mermaid
+graph TD
+    A[User Uploads PDF] --> B[PDF Text Extraction]
+    B --> C{Extraction Success?}
+    C -->|Yes| D[User Inputs TCC Theme]
+    C -->|No| E[Error: Cannot extract text]
+    D --> F[AI Evaluation Process]
+    F --> G[Relevance Analysis]
+    F --> H[Originality Check]
+    F --> I[Methodology Quality]
+    F --> J[Results & Discussion]
+    F --> K[Potential Impact]
+    F --> L[Writing Clarity]
+    F --> M[References Timeliness]
+    G --> N[Final Score Calculation]
+    H --> N
+    I --> N
+    J --> N
+    K --> N
+    L --> N
+    M --> N
+    N --> O[Display Results]
+    O --> P[User Reviews Evaluation]
+    
+    style A fill:#e1f5fe
+    style O fill:#c8e6c9
+    style E fill:#ffcdd2
+    style F fill:#fff3e0
 ```
 
-### Installation / Instalação
+## 🏗️ Architecture Overview
 
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/article-scout.git
-cd article-scout
-
-# Create virtual environment
-python3 -m venv .venv
-source .venv/bin/activate  # Linux/Mac
-# or
-.venv\Scripts\activate     # Windows
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env and add your GROQ_API_KEY
+```mermaid
+graph TB
+    subgraph "Frontend"
+        A[Streamlit Web Interface]
+    end
+    
+    subgraph "Backend Services"
+        B[PDF Extractor]
+        C[Article Scout Agent]
+        D[Groq AI API]
+    end
+    
+    subgraph "Data Processing"
+        E[Text Extraction]
+        F[Content Analysis]
+        G[Score Calculation]
+    end
+    
+    subgraph "Configuration"
+        H[Environment Variables]
+        I[Settings Management]
+    end
+    
+    A --> B
+    A --> C
+    B --> E
+    C --> F
+    C --> D
+    F --> G
+    H --> C
+    I --> C
+    
+    style A fill:#e3f2fd
+    style D fill:#f3e5f5
+    style G fill:#e8f5e8
 ```
 
-### Usage / Uso
-
-#### Web Application / Aplicação Web
-```bash
-# Start Streamlit app
-streamlit run streamlit_app.py
-```
-
-#### Command Line / Linha de Comando
-```bash
-# Test PDF extraction
-python3 -m pytest tests/test_pdf_extraction.py -v
-
-# Test complete integration
-python3 -m pytest tests/test_integration.py -v
-
-# Test Streamlit integration
-python3 -m pytest tests/test_streamlit_integration.py -v
-```
-
----
-
-## 📁 Project Structure / Estrutura do Projeto
+## 📁 Project Structure
 
 ```
 article_scout/
-├── 📁 input_files/              # PDF files for testing
-├── 📁 utils/
-│   ├── __init__.py
-│   └── pdf_extractor.py         # PDF text extraction module
-├── 📁 tests/
-│   ├── __init__.py
-│   ├── test_pdf_extraction.py   # PDF extraction tests
-│   ├── test_integration.py      # Integration tests
-│   └── test_streamlit_integration.py  # Streamlit flow tests
-├── article_scout_agent.py       # Main evaluation engine
-├── streamlit_app.py             # Web interface
-├── requirements.txt             # Python dependencies
-├── pyproject.toml              # Project configuration
-└── README.md                   # This file
+├── src/
+│   └── article_scout/          # Main application code
+│       ├── __init__.py
+│       ├── main.py            # Application entry point
+│       ├── article_scout_agent.py
+│       ├── streamlit_app.py   # Web interface
+│       └── utils/             # Utility modules
+│           ├── __init__.py
+│           └── pdf_extractor.py
+├── config/                    # Configuration files
+│   ├── settings.py
+│   ├── env.example
+│   └── .python-version
+├── scripts/                   # Utility scripts
+│   ├── dev.sh
+│   └── build.sh
+├── docs/                      # Documentation
+│   ├── README.md
+│   └── LICENSE
+├── data/                      # Data and examples
+│   ├── examples/
+│   └── input_files/
+├── tests/                     # Test files
+├── docker/                    # Docker configuration
+│   └── Dockerfile
+├── pyproject.toml            # Project configuration
+├── uv.lock                   # Dependency lock file
+└── README.md                 # This file
 ```
 
----
+## 🚀 Quick Start
 
-## 🔧 Configuration / Configuração
+### Prerequisites
 
-### Environment Variables / Variáveis de Ambiente
+- Python 3.12+
+- Docker (optional)
+- Groq API key
 
-Create a `.env` file in the project root:
+### Installation
 
-```env
-GROQ_API_KEY=your_groq_api_key_here
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd article_scout
+   ```
+
+2. **Install dependencies**
+   ```bash
+   uv sync
+   ```
+
+3. **Configure environment**
+   ```bash
+   cp config/env.example .env
+   # Edit .env with your GROQ_API_KEY
+   ```
+
+4. **Run the application**
+   ```bash
+   # Using the development script
+   ./scripts/dev.sh
+   
+   # Or directly
+uv run python -m streamlit run src/article_scout/streamlit_app.py
+   ```
+
+## 🐳 Docker
+
+### Build and run with Docker
+
+```bash
+# Build the image
+./scripts/build.sh
+
+# Run with environment variables
+docker run -p 8501:8501 -e GROQ_API_KEY=your_key article-scout:latest
+
+# Or with .env file
+docker run -p 8501:8501 --env-file .env article-scout:latest
 ```
 
-### API Limits / Limites da API
-
-- **Input limit**: 5000 characters (configurable in `article_scout_agent.py`)
-- **Model**: llama-3.1-8b-instant (Groq)
-- **Temperature**: 0.3 (for consistent results)
-
----
-
-## 🧪 Testing / Testes
-
-### Running Tests / Executando Testes
+## 🧪 Testing
 
 ```bash
 # Run all tests
-python3 -m pytest tests/ -v
+uv run pytest tests/ -v
 
-# Run specific test categories
-python3 -m pytest tests/test_pdf_extraction.py -v      # PDF extraction
-python3 -m pytest tests/test_integration.py -v         # Integration
-python3 -m pytest tests/test_streamlit_integration.py -v  # Streamlit flow
-
-# Run with detailed output
-python3 -m pytest tests/ -v -s
+# Run specific test
+uv run pytest tests/test_pdf_extraction.py -v
 ```
 
-### Test Coverage / Cobertura de Testes
+## 🔧 Development
 
-- ✅ PDF text extraction with multiple methods
-- ✅ Article Scout Agent evaluation workflow
-- ✅ Streamlit integration flow
-- ✅ Error handling and edge cases
-- ✅ Performance testing
-- ✅ API limit handling
-
----
-
-## 📊 Evaluation Criteria / Critérios de Avaliação
-
-The Article Scout evaluates papers based on 7 key criteria:
-
-| Criterion / Critério | Weight / Peso | Description / Descrição |
-|---------------------|---------------|-------------------------|
-| **Relevance** | 20% | How well the paper aligns with your research theme |
-| **Originality** | 15% | Novelty and innovation of the work |
-| **Methodology** | 15% | Quality and robustness of research methods |
-| **Results & Discussion** | 15% | Clarity and soundness of findings |
-| **Potential Impact** | 15% | Significance and implications of the work |
-| **Writing Clarity** | 10% | Readability and communication quality |
-| **References** | 10% | Timeliness and relevance of citations |
-
----
-
-## 🔄 Workflow / Fluxo de Trabalho
-
-```
-1. 📁 PDF Upload
-   ↓
-2. 🔍 Text Extraction (utils/pdf_extractor.py)
-   ↓
-3. 🤖 AI Evaluation (article_scout_agent.py)
-   ↓
-4. 📊 Results Display (streamlit_app.py)
-```
-
-### Detailed Flow / Fluxo Detalhado
-
-1. **PDF Upload**: User uploads a research paper PDF
-2. **Text Extraction**: System extracts text using multiple methods
-3. **Text Truncation**: If needed, text is truncated to fit API limits
-4. **AI Evaluation**: Article Scout Agent evaluates the paper
-5. **Results Formatting**: Results are formatted for display
-6. **Web Display**: Results are shown in the Streamlit interface
-
----
-
-## 🛠️ Development / Desenvolvimento
-
-### Adding New Features / Adicionando Novas Funcionalidades
-
-1. **PDF Extraction Methods**:
-   - Add new method in `utils/pdf_extractor.py`
-   - Update fallback chain in `try_pdfminer()` or `try_pymupdf()`
-
-2. **Evaluation Criteria**:
-   - Add new criterion in `article_scout_agent.py`
-   - Update `State` TypedDict and workflow
-   - Add corresponding test cases
-
-3. **Web Interface**:
-   - Modify `streamlit_app.py` for new features
-   - Update result formatting functions
-
-### Code Style / Estilo de Código
-
-- Follow PEP 8 guidelines
-- Use type hints
-- Add docstrings for all functions
-- Write comprehensive tests
-
----
-
-## 🐛 Troubleshooting / Solução de Problemas
-
-### Common Issues / Problemas Comuns
-
-#### PDF Extraction Fails / Falha na Extração de PDF
-```bash
-# Check if PDF is image-based
-python3 -c "from utils.pdf_extractor import extract_text_from_pdf; print(extract_text_from_pdf('your_file.pdf'))"
-```
-
-#### API Key Issues / Problemas com Chave da API
-```bash
-# Verify environment variable
-echo $GROQ_API_KEY
-# or
-python3 -c "import os; print(os.getenv('GROQ_API_KEY'))"
-```
-
-#### Import Errors / Erros de Importação
-```bash
-# Check Python path
-python3 -c "import sys; print(sys.path)"
-# Ensure you're in the project root directory
-```
-
----
-
-## 📈 Performance / Performance
-
-### Benchmarks / Benchmarks
-
-- **PDF Extraction**: < 10 seconds for most files
-- **AI Evaluation**: < 60 seconds for standard papers
-- **Total Workflow**: < 2 minutes end-to-end
-
-### Optimization Tips / Dicas de Otimização
-
-- Use smaller PDFs when possible
-- Consider pre-processing large documents
-- Cache evaluation results for repeated papers
-
----
-
-## 🤝 Contributing / Contribuindo
-
-### How to Contribute / Como Contribuir
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-### Development Setup / Configuração de Desenvolvimento
+### Available Commands
 
 ```bash
-# Install development dependencies
-pip install -r requirements-dev.txt
+# Show all available commands
+make help
+
+# Install dependencies
+make install
+
+# Run tests
+make test
+
+# Format code
+make format
 
 # Run linting
-flake8 .
+make lint
 
-# Run type checking
-mypy .
+# Clean cache files
+make clean
 
-# Run all tests
-python3 -m pytest tests/ -v --cov=.
+# Build Docker image
+make build
+
+# Run application locally
+make run
+
+# Run with Docker
+make docker-run
 ```
 
----
+### Code Quality
 
-## 📄 License / Licença
+The project uses several tools to maintain code quality:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- **Black**: Code formatting
+- **isort**: Import sorting
+- **flake8**: Linting
+- **pre-commit**: Git hooks for quality checks
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
+## 📚 Features
 
----
+### 🔍 PDF Processing
+- Multi-method text extraction (PyPDF2, pdfminer.six, PyMuPDF)
+- Automatic fallback mechanisms
+- Token limit management
 
-## 🙏 Acknowledgments / Agradecimentos
+### 🤖 AI Evaluation
+- Relevance to TCC theme analysis
+- Originality assessment
+- Methodology quality evaluation
+- Results and discussion analysis
+- Potential impact assessment
+- Writing clarity evaluation
+- References timeliness check
 
-- **Groq** for providing the LLM API
+### 📊 Scoring System
+- Comprehensive scoring across 7 criteria
+- Weighted final score calculation
+- Detailed explanations for each criterion
+
+### 🌐 Web Interface
+- User-friendly Streamlit interface
+- Real-time PDF upload and processing
+- Interactive results display
+- Error handling and user feedback
+
+## 🔑 Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `GROQ_API_KEY` | Groq API key (required) | - |
+| `GROQ_MODEL` | AI model to use | `llama-3.1-8b-instant` |
+| `GROQ_TEMPERATURE` | AI response randomness | `0.3` |
+| `MAX_TOKENS` | Maximum tokens for processing | `5000` |
+| `MAX_INPUT_CHARS` | Maximum input characters | `5000` |
+
+## 📚 Documentation
+
+- [Technical Diagrams](docs/technical-diagrams.md) - Detailed architecture and flow diagrams
+- [Project Documentation](docs/) - Additional project documentation
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+### Development Setup
+
+```bash
+# Clone and setup
+git clone <repository-url>
+cd article_scout
+make setup
+
+# Install pre-commit hooks
+pre-commit install
+
+# Start development
+make dev
+```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](docs/LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **Groq** for providing the AI API
 - **Streamlit** for the web framework
-- **PyPDF2** and **pdfminer.six** for PDF processing
-- **LangGraph** for workflow orchestration
-
----
-
-## 📞 Support / Suporte
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/article-scout/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/article-scout/discussions)
-- **Email**: your.email@example.com
-
----
-
-## 🔄 Changelog / Histórico de Versões
-
-### v1.0.0 (2024-01-XX)
-- ✅ Initial release
-- ✅ PDF text extraction with multiple methods
-- ✅ AI-powered paper evaluation
-- ✅ Streamlit web interface
-- ✅ Comprehensive test suite
-- ✅ Integration testing framework
-
----
-
-**Made with ❤️ for the academic community**
-
-**Feito com ❤️ para a comunidade acadêmica**
+- **LangChain** for AI integration tools
+- **PyMuPDF** for PDF processing capabilities

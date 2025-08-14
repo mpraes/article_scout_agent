@@ -12,22 +12,26 @@ if current_dir not in sys.path:
     sys.path.append(current_dir)
 
 # Import the PDF extractor from the utils folder
-# Make sure the 'utils' folder exists and contains 'pdf_extractor.py'
 try:
-    from utils.pdf_extractor import extract_text_from_pdf
+    from .utils.pdf_extractor import extract_text_from_pdf
 except ImportError:
-    st.error("Error: Could not import 'extract_text_from_pdf' from the 'utils' folder.")
-    st.info("Please ensure that the 'utils' folder exists and contains the 'pdf_extractor.py' file.")
-    st.stop()
+    try:
+        from utils.pdf_extractor import extract_text_from_pdf
+    except ImportError:
+        st.error("Error: Could not import 'extract_text_from_pdf' from the 'utils' folder.")
+        st.info("Please ensure that the 'utils' folder exists and contains the 'pdf_extractor.py' file.")
+        st.stop()
 
 # Import the evaluation function from your Article Scout agent
-# Make sure 'article_scout_agent.py' is in the same folder or in sys.path
 try:
-    from article_scout_agent import evaluate_research_paper
+    from .article_scout_agent import evaluate_research_paper
 except ImportError:
-    st.error("Error: Could not import 'evaluate_research_paper' from 'article_scout_agent.py'.")
-    st.info("Please ensure that 'article_scout_agent.py' is in the same folder as 'streamlit_app.py'.")
-    st.stop()
+    try:
+        from article_scout_agent import evaluate_research_paper
+    except ImportError:
+        st.error("Error: Could not import 'evaluate_research_paper' from 'article_scout_agent.py'.")
+        st.info("Please ensure that 'article_scout_agent.py' is in the same folder as 'streamlit_app.py'.")
+        st.stop()
 
 # Streamlit page configurations
 st.set_page_config(page_title="Article Scout - Article Evaluator", layout="centered")
@@ -48,6 +52,21 @@ tcc_theme = st.text_input(
 # PDF file upload
 uploaded_file = st.file_uploader("Upload the research paper in PDF", type="pdf")
 
+# Check if API key is configured
+api_key_configured = os.getenv('GROQ_API_KEY') and os.getenv('GROQ_API_KEY') != 'your_groq_api_key_here'
+
+if not api_key_configured:
+    st.warning("⚠️ **API Key Not Configured**")
+    st.info("""
+    To use Article Scout, you need to configure your Groq API key:
+    
+    1. Copy `config/env.example` to `.env`
+    2. Edit `.env` and set your `GROQ_API_KEY`
+    3. Get your API key from: https://console.groq.com/
+    
+    The application will show a demo mode until the API key is configured.
+    """)
+
 # Button to start evaluation
 if st.button("Evaluate Paper"):
     if uploaded_file is not None and tcc_theme:
@@ -64,6 +83,11 @@ if st.button("Evaluate Paper"):
             os.unlink(temp_pdf_path)
 
             if article_text:
+                if not api_key_configured:
+                    st.error("❌ **API Key Required**")
+                    st.info("Please configure your Groq API key in the `.env` file to evaluate papers.")
+                    st.stop()
+                
                 # Call the agent to evaluate the paper
                 results = evaluate_research_paper(article_text, tcc_theme)
 

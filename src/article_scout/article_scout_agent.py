@@ -18,7 +18,8 @@ groq_api_key = os.getenv('GROQ_API_KEY')
 if groq_api_key:
     os.environ["GROQ_API_KEY"] = groq_api_key
 else:
-    raise ValueError("GROQ_API_KEY not found in environment variables. Please ensure it is configured in your .env file")
+    print("Warning: GROQ_API_KEY not found in environment variables. Please ensure it is configured in your .env file")
+    print("The application will show an error when trying to evaluate papers.")
 # %%
 class State(TypedDict):
     """
